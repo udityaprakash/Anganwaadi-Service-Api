@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/public',express.static("public"));
+app.use(express.static("public"));
 app.use('/api/client/v1', require('./router/client'));
 app.use('/api/admin/v1', require('./router/admin'));
 
