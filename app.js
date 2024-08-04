@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const connectDB = require('./src/database/DBconnection');
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -8,8 +9,10 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
-app.use('/api/client/v1', require('./router/client'));
-app.use('/api/admin/v1', require('./router/admin'));
+app.use('/api/v1/client', require('./router/client'));
+app.use('/api/v1/admin', require('./router/admin'));
+
+connectDB.connection();
 
 app.get('/', (req, res) => {
     res.status(200).json({
