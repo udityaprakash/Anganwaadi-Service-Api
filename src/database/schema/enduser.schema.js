@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 
 const schema= new mongoose.Schema({
     phoneNumber : {
-     type:String,
-     length:10,
-     required:true
+        type:String,
+        length:10,
+        required:true,
+        unique:true
     },
     registeredAt: {
         type:String,

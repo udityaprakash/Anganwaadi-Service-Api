@@ -15,6 +15,14 @@ const adminSignup = async (req, res) => {
         name
     });
     try {
+        const existingAdmin = await admin.findOne({ phoneNumber });
+        if (existingAdmin) {
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Phone number is already registered'
+            });
+        }
         await adminUser.save();
         res.status(201).json({
             status: 'success',

@@ -4,7 +4,8 @@ const schema= new mongoose.Schema({
     phoneNumber : {
      type:String,
      length:10,
-     required:true
+     required:true,
+     unique:true
     },
     mPin: {
         type:Number,

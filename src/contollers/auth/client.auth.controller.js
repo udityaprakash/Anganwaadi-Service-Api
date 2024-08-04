@@ -17,6 +17,14 @@ const clientSignup = async (req, res) => {
         registeredName: name,
     });
     try {
+        const existingAdmin = await client.findOne({ phoneNumber });
+        if (existingAdmin) {
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Phone number is already registered'
+            });
+        }
         await clientUser.save();
         const authToken = await jwt.sign({ id: clientUser._id }, process.env.JWT_SECRET);
         res.status(201).json({
