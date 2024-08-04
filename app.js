@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
     res.status(200).json({
         status: 'success',
         error: false,
+        data:{
+            version: "1.0.0",
+        },
         message: "Welcome to Anganwaadi API's"
     });
 });
