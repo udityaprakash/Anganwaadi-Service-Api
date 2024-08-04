@@ -2,6 +2,13 @@ const admin = require('../../database/schema/adminuser.schema');
 const jwt = require('jsonwebtoken');
 const adminSignup = async (req, res) => {
     const { phoneNumber, mPin, name } = req.body;
+    if(!phoneNumber || !mPin || !name){
+        return res.status(400).json({
+            status: 'failure',
+            error: true,
+            message: 'Please provide all the required fields'
+        });
+    }
     const adminUser = new admin({
         phoneNumber,
         mPin,
