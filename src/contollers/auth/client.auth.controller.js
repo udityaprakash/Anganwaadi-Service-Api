@@ -26,7 +26,7 @@ const clientSignup = async (req, res) => {
             });
         }
         await clientUser.save();
-        const authToken = await jwt.sign({ id: clientUser._id }, process.env.JWT_SECRET);
+        const authToken = await jwt.sign({ id: clientUser._id, userType:'client' }, process.env.JWT_SECRET);
         res.status(201).json({
             status: 'success',
             error: false,
@@ -64,7 +64,7 @@ const clientLogin = async (req, res) => {
                 message: 'Phone number Invalid'
             });
         }
-        const authToken = await jwt.sign({ id: clientUser._id }, process.env.JWT_SECRET);
+        const authToken = await jwt.sign({ id: clientUser._id, userType:'client' }, process.env.JWT_SECRET);
         res.status(200).json({
             status: 'success',
             error: false,

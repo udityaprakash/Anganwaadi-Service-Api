@@ -57,7 +57,7 @@ const adminLogin = async (req, res) => {
                 message: 'Invalid credentials'
             });
         }
-        const authToken = await jwt.sign({ id: adminUser._id }, process.env.JWT_SECRET);
+        const authToken = await jwt.sign({ id: adminUser._id, userType:'admin' }, process.env.JWT_SECRET);
         res.status(200).json({
             status: 'success',
             error: false,

@@ -9,8 +9,8 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
-app.use('/api/v1/client', require('./router/client'));
-app.use('/api/v1/admin', require('./router/admin'));
+app.use('/api/v1/client', require('./router/client.router'));
+app.use('/api/v1/admin', require('./router/admin.router'));
 
 connectDB.connection();
 
