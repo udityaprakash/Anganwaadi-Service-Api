@@ -20,6 +20,10 @@ const schema= new mongoose.Schema({
         type:String,
         required:false
     },
+    blocked: {
+        type:Boolean,
+        default:false
+    }
 });
 
 const result = mongoose.model("admin" , schema);

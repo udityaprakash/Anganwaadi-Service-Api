@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-const schema= new mongoose.Schema({
+const Schema = mongoose.Schema;
+const schema= new Schema({
     phoneNumber : {
         type:String,
         length:10,
@@ -8,7 +8,8 @@ const schema= new mongoose.Schema({
         unique:true
     },
     registeredAt: {
-        type:String,
+        type:Schema.Types.ObjectId,
+        ref: 'admin'
     },
     name: {
         type:String,

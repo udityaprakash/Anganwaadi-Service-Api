@@ -2,21 +2,33 @@ function jwtError(error) {
   switch (error.name) {
     case 'TokenExpiredError':
       return {
-        status: 'failure',
+        status: 'success',
         error: true,
-        message: 'Auth token has expired'
+        data:{
+          jwtError:true,
+          jwtErrorCode:103,
+        },
+        message: 'Jwt Token has expired'
     };
     case 'JsonWebTokenError':
       return {
-        status: 'failure',
+        status: 'success',
         error: true,
-        message: 'Invalid auth token'
+        data:{
+          jwtError:true,
+          jwtErrorCode:107,
+        },
+        message: 'Invalid Jwt token'
     };
     default:
       return {
-        status: 'failure',
+        status: 'success',
         error: true,
-        message: 'An error occurred while verifying'
+        data:{
+          jwtError:true,
+          jwtErrorCode:112,
+        },
+        message: 'An error occurred while verifying Jwt Token'
     };
   }
 }

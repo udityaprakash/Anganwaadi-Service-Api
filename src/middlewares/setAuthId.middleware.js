@@ -7,7 +7,7 @@ const authorizeUser =(req, res, next)=>{
             const authToken = req.headers.authorization.split(' ')[1];
             const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
             req.data = decoded;
-            req.authId = decoded._id;
+            req.authId = decoded.id;
             req.authUserType = decoded.userType;
             next();
         } catch (error) {
