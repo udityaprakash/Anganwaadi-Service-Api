@@ -3,6 +3,7 @@ const router = express.Router();
 const {clientLogin, clientSignup} = require('../src/contollers/auth/client.auth.controller');
 const {clientQrVerification} = require('../src/contollers/QR handler/qrdata.controller');
 const { authorizeUser } = require('../src/middlewares/setAuthId.middleware');
+
 router.post('/signup', clientSignup);
 router.post('/login', clientLogin);
 router.post('/getRegistered', authorizeUser, clientQrVerification);

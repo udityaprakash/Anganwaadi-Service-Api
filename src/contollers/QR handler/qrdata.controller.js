@@ -37,7 +37,7 @@ const clientQrVerification = async (req, res)=>{
             res.status(400).json(jwtError(err));
             return;
         }
-        const adminData = await adminDB.findById(qrJwt.registererId);
+        const adminData = await adminDB.findById(qrJwt.registererId).select('name phoneNumber blocked');
         if(!adminData){
             res.status(404).json({
                 status:'failure',
@@ -70,7 +70,6 @@ const clientQrVerification = async (req, res)=>{
             error:false,
             data:{
                 message:'You have been successfully registered',
-                registeredAt:qrJwt.registererId,
                 registererInfo:adminData
             },
             message:`QR code verified successfully and registered at admin ${adminData.name}`
