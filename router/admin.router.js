@@ -12,7 +12,7 @@ router.post('/signup', adminSignup);
 router.post('/login', adminLogin);
 router.get('/qr',authorizeUser,isAdmin, adminQRData);
 router.get('/profile', authorizeUser,isAdmin, adminProfile);
-router.get('/sendNotificationToAll', authorizeUser,isAdmin,sendNotificationToAllController);
+router.post('/sendNotificationToAll', authorizeUser,isAdmin,sendNotificationToAllController);
 
 router.all("*",(req,res)=>{
     res.status(404).json({
