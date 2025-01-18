@@ -13,12 +13,12 @@ Developed a **cost-effective and scalable notification system** to inform villag
 - **Improved Event Attendance**: Increased participation in village events by **40%** through timely and targeted notifications.
 - **Cost Savings**: Reduced communication costs by **$X,XXX annually** per village by eliminating SMS expenses.
 - **Enhanced Community Engagement**: Conducted **50+ surveys** on critical topics (e.g., healthcare, education), enabling data-driven decision-making by local authorities.
-- **Scalability**: Successfully deployed in **X villages**, reaching **X,XXX+ users** with plans for nationwide expansion.
+- **Scalability**: Successfully deployed in **2 villages**, reaching **8,000+ users** with plans for nationwide expansion.
 
 ## Technologies Used
 - **Frontend**: Flutter (for cross-platform mobile app), React.js (for admin dashboard)
-- **Backend**: Node.js, GraphQL (for real-time notifications), MongoDB (for data storage)
-- **Push Notifications**: Firebase Cloud Messaging (FCM)
+- **Backend**: Node.js, RestAPI's, GraphQL (for real-time notifications), MongoDB (for data storage), Redis(Cache)
+- **Push Notifications**: OneSignal Push Notification
 - **Offline Support**: Workbox (for caching), IndexedDB (for local storage)
 - **Analytics**: Google Analytics, Custom Dashboard for Admin Insights
 
@@ -30,11 +30,20 @@ Developed a **cost-effective and scalable notification system** to inform villag
 ## Business Value
 - **Cost-Effective Solution**: Saved **$X,XXX per village annually** by replacing SMS with push notifications.
 - **Increased Efficiency**: Reduced the time taken to disseminate information from **hours to seconds**.
-- **Community Impact**: Improved access to critical services (e.g., vaccinations, food distribution) for **X,XXX+ villagers**.
+- **Community Impact**: Improved access to critical services (e.g., vaccinations, food distribution ) for **6,000+ villagers**.
 
 ---
 
 ### How to Use
 1. **Clone the Repository**:
+   
    ```bash
-   git clone https://github.com/your-username/village-notification-system.git
+   git clone https://github.com/udityaprakash/Anganwaadi-Service-Api.git
+
+2. **Install Dependencies**:
+   
+   ```bash
+   cd Anganwaadi-Service-Api
+   npm install
+   node app
+   
