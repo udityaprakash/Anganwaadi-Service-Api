@@ -1,9 +1,11 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const connectDB = require('./src/database/DBconnection');
+const webSocketHandle = require('./router/ws.router');
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 3000;
+const server = require('http').createServer(app);
 
 
 app.use(bodyParser.json());
@@ -33,8 +35,9 @@ app.all("*",(req,res)=>{
     });
 });
 
+webSocketHandle(server);
 if(process.env.SERVER === 'development') {
-    app.listen(port, () => {
+    server.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     });
 }
