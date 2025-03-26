@@ -6,6 +6,7 @@ const { isAdmin } = require('../src/middlewares/isAdmin');
 const { adminQRData } = require('../src/contollers/QR handler/qrdata.controller');
 const { adminProfile } = require('../src/contollers/Profile.controller');
 const { sendNotificationToAllController } = require('../src/contollers/Notification/sendNotificationToAll.constroller');
+const { adminMessagesHistory } = require('../src/contollers/messageHandler/adminMessages.controller');
 // const { sendNotificationToAll } = require('../src/service/notificationService.helper');
 
 router.post('/signup', adminSignup);
@@ -13,6 +14,7 @@ router.post('/login', adminLogin);
 router.post('/qr',authorizeUser,isAdmin, adminQRData);
 router.post('/profile', authorizeUser,isAdmin, adminProfile);
 router.post('/sendNotificationToAll', authorizeUser,isAdmin,sendNotificationToAllController);
+router.post('/messageHistory', authorizeUser,isAdmin,adminMessagesHistory);
 
 router.all("*",(req,res)=>{
     res.status(404).json({
