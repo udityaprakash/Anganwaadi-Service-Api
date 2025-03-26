@@ -18,6 +18,10 @@ const schema= new Schema({
             ref: 'client'
         }
     ],
+    sendToAll: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date,
         default: Date.now,

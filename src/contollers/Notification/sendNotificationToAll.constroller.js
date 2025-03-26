@@ -1,10 +1,28 @@
 const clientDB = require('../../database/schema/enduser.schema'); 
 const {sendNotificationToAll} = require('../../service/notificationService.helper');
+const msgLog = require('../../database/schema/notificationHistory.schema');
 
 const sendNotificationToAllController = async (req, res) => {
     try{
         var msg = req.body.message;
         msg = msg ? msg : 'You have new Notification. Click to View!';
+        try{
+
+            const newMsg = new msgLog({
+                message: msg,
+                sendBy: req.authId,
+                sendToAll: true,
+            });
+            await newMsg.save();
+        } catch(err){
+            console.log(err);
+            res.status(500).json({
+                status: 'failure',
+                error: true,
+                data: err,
+                message: 'Internal server error'
+            });
+        }
         const fetchAllUsers = await clientDB.find({registeredAt: req.authId}).select('deviceId');
         const deviceIds = fetchAllUsers.map(user => user.deviceId);
         console.log(deviceIds);
