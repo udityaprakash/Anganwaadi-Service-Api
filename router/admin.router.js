@@ -10,8 +10,8 @@ const { sendNotificationToAllController } = require('../src/contollers/Notificat
 
 router.post('/signup', adminSignup);
 router.post('/login', adminLogin);
-router.get('/qr',authorizeUser,isAdmin, adminQRData);
-router.get('/profile', authorizeUser,isAdmin, adminProfile);
+router.post('/qr',authorizeUser,isAdmin, adminQRData);
+router.post('/profile', authorizeUser,isAdmin, adminProfile);
 router.post('/sendNotificationToAll', authorizeUser,isAdmin,sendNotificationToAllController);
 
 router.all("*",(req,res)=>{

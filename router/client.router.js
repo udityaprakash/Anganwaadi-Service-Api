@@ -8,7 +8,7 @@ const { clientProfile } = require('../src/contollers/Profile.controller');
 router.post('/signup', clientSignup);
 router.post('/login', clientLogin);
 router.post('/getRegistered', authorizeUser, clientQrVerification);
-router.get('/profile', authorizeUser, clientProfile);
+router.post('/profile', authorizeUser, clientProfile);
 
 router.all("*",(req,res)=>{
     res.status(404).json({
