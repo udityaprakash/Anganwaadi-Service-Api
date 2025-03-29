@@ -1,12 +1,24 @@
 const msgLog = require('../../database/schema/notificationHistory.schema');
+const clientdb = require('../../database/schema/enduser.schema');
 
 const clientMessagesHistory = async (req,res)=>{
     try{
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        console.log('adminId: ',req.body.adminId);
+        // console.log('here');
 
-        var msgs = await msgLog.find({sendBy:req.body.adminId, 
+        var user =await clientdb.findOne({_id:req.authId}).select('registeredAt');
+        // console.log(user);
+
+        const totalMsgs = await msgLog.countDocuments({
+            sendBy: user.registeredAt,
+            $or: [
+                { sendTo: { $in: [req.authId] } },
+                { sendTo: { $size: 0 } }
+            ]
+        });
+
+        var msgs = await msgLog.find({sendBy:user.registeredAt, 
             $or: [
                 { sendTo: { $in: [req.authId] } },
                 { sendTo: { $size: 0 } }
@@ -14,25 +26,31 @@ const clientMessagesHistory = async (req,res)=>{
             // sendTo:{ $in: [req.authId] || [] }
         })
         // .populate('sendBy')
+        .sort({createdAt:-1})
         .skip((page - 1) * limit)
         .limit(limit)
-        .sort({createdAt:-1});
+        .lean();
         if(!msgs){
             return res.status(200).json({
                 status:'success',
                 error:false,
                 message:'No messages found',
-                data:[]
+                data:[],
+                page:page,
+                limit:limit
             });
         }
 
         return res.status(200).json({
             status:'success',
             error:false,
-            message:`Messages found ${msgs.length}`,
+            message:`Messages found ${totalMsgs}`,
             currentPage: page,
-            totalPages: Math.ceil(msgs.length / limit),
-            data:msgs
+            totalPages: Math.ceil(totalMsgs / limit),
+            totalMessages: totalMsgs,
+            data:msgs,
+            page:page,
+            limit:limit
         });
 
     }catch(err){

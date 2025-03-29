@@ -4,28 +4,36 @@ const adminMessagesHistory = async (req,res)=>{
     try{
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        // console.log("page: "+page," limit : "+limit);
+        
+        var totalMessages =await msgLog.countDocuments({sendBy: req.authId});
+        // console.log("page: "+page," limit : "+limit, " totalMessages: "+totalMessages);
 
         var msgs = await msgLog.find({sendBy: req.authId})
+        .sort({createdAt:-1})
         .skip((page - 1) * limit)
         .limit(limit)
-        .sort({createdAt:-1});
+        .lean();
         if(!msgs){
             return res.status(200).json({
                 status:'success',
                 error:false,
                 message:'No messages found',
-                data:[]
+                data:[],
+                limit:limit,
+                page:page
             });
         }
 
         return res.status(200).json({
             status:'success',
             error:false,
-            message:`Messages found ${msgs.length}`,
+            message:`Messages found ${totalMessages}`,
             currentPage: page,
-            totalPages: Math.ceil(msgs.length / limit),
-            data:msgs
+            totalPages: Math.ceil(totalMessages / limit),
+            totalMessages: totalMessages,
+            data:msgs,
+            limit:limit,
+            page:page
         });
 
     }catch(err){
