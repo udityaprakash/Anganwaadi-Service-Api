@@ -1,4 +1,5 @@
 const client = require('../../database/schema/enduser.schema');
+const tempdb = require('../../database/schema/tempAuth.schema');
 const jwt = require('jsonwebtoken');
 
 const clientSignup = async (req, res) => {
@@ -84,7 +85,63 @@ const clientLogin = async (req, res) => {
     }
 }
 
+const clientLoginWithOTP = async (req, res) => {
+    const {phonenumber} = req.body;
+    if(!phonenumber){
+        return res.status(400).json({
+            status: 'failure',
+            error: true,
+            message: 'Please provide all the required fields like number'
+        });
+    }
+    try{
+        var userexist = await client.findOne({phoneNumber: phonenumber});
+        if(!userexist){
+            return res.json({
+                status: 'failure',
+                error: true,
+                message: 'Phone number is not registered. Kindly signup first'
+            });
+        }
+
+        var user = await tempdb.findOne({phoneNumber: phonenumber});
+        if(user){
+            await tempdb.findOneAndReplace({phoneNumber: phonenumber}, {
+                phoneNumber: phonenumber,
+                otp: Math.floor(1000 + Math.random() * 9000),
+                isFresh: false
+            });          
+        }else{
+
+            var clientUser = new tempdb({
+                phoneNumber: phonenumber,
+                otp: Math.floor(1000 + Math.random() * 9000),
+                isFresh: false
+            }); 
+    
+            await clientUser.save();
+        }
+
+        res.status(200).json({
+            status: 'success',
+            error: false,
+            message: 'OTP sent successfully'
+        });
+
+        
+
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            status: 'failure',
+            error: true,
+            message: 'Internal server error'
+        });
+    }
+}
+
 module.exports = {
     clientSignup,
-    clientLogin
+    clientLogin,
+    clientLoginWithOTP
 }
