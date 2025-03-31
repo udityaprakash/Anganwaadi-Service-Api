@@ -108,6 +108,8 @@ const clientLoginWithOTP = async (req, res) => {
         if(user){
             await tempdb.findOneAndReplace({phoneNumber: phonenumber}, {
                 phoneNumber: phonenumber,
+                name: userexist.name,
+                registeredAt: userexist.registeredAt,
                 otp: Math.floor(1000 + Math.random() * 9000),
                 isFresh: false
             });          
@@ -115,6 +117,8 @@ const clientLoginWithOTP = async (req, res) => {
 
             var clientUser = new tempdb({
                 phoneNumber: phonenumber,
+                name: userexist.name,
+                registeredAt: userexist.registeredAt,
                 otp: Math.floor(1000 + Math.random() * 9000),
                 isFresh: false
             }); 
