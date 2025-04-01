@@ -144,6 +144,9 @@ const clientLoginWithOTP = async (req, res) => {
     }
 }
 
+const clientSignupWithOTP = async (req, res) => {
+}
+
 module.exports = {
     clientSignup,
     clientLogin,
