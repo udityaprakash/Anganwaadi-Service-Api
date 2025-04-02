@@ -85,4 +85,20 @@ const clientQrVerification = async (req, res)=>{
     }
 }
 
-module.exports = {adminQRData, clientQrVerification};
+async function verifyqrData(qrData){
+    try{
+        var qrJwt = await jwt.verify(qrData, process.env.QR_SECRET);
+        return {data:qrJwt, success:true};
+    }catch(err){
+        console.log(jwtError(err).message);
+        if(err.name == 'TokenExpiredError'){
+            return {success:false, error:'Token expired'};
+        }else if(err.name == 'JsonWebTokenError'){
+            return {success:false, error:'Invalid token'};
+        }
+
+        return {success:false, error:err.message};
+    }
+}
+
+module.exports = {adminQRData, clientQrVerification, verifyqrData};

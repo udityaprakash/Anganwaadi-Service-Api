@@ -1,6 +1,7 @@
 const client = require('../../database/schema/enduser.schema');
 const tempdb = require('../../database/schema/tempAuth.schema');
 const jwt = require('jsonwebtoken');
+const { verifyqrData } = require('../QR handler/qrdata.controller');
 
 const clientSignup = async (req, res) => {
     const { phoneNumber, name ,deviceId} = req.body;
@@ -145,10 +146,81 @@ const clientLoginWithOTP = async (req, res) => {
 }
 
 const clientSignupWithOTP = async (req, res) => {
+
+    try{
+
+        const {name, phoneNumber, qrdata} = req.body;
+        if(!name || !phoneNumber || !qrdata){
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Please provide all the required fields like name, phoneNumber and qrdata'
+            });
+        }
+        var qrres =await verifyqrData(qrdata);
+        if(!qrres.success){
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Rescan the QR code',
+                data: qrres.error
+            });
+        }
+        const userexist = await client.findOne({phoneNumber: phoneNumber});
+        if(userexist){
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Phone number is already registered'
+            });
+        }
+        const user = await tempdb.findOne({phoneNumber: phoneNumber});
+        if(user){
+            await tempdb.findOneAndReplace({phoneNumber: phoneNumber}, {
+                phoneNumber: phoneNumber,
+                name: name,
+                registeredAt: qrres.data.registererId,
+                otp: Math.floor(1000 + Math.random() * 9000),
+                isFresh: true
+            });          
+        }else{
+    
+            var clientUser = new tempdb({
+                phoneNumber: phoneNumber,
+                name: name,
+                registeredAt: qrres.data.registererId,
+                otp: Math.floor(1000 + Math.random() * 9000),
+                isFresh: true
+            }); 
+    
+            await clientUser.save();
+        }
+    
+        res.status(200).json({
+            status: 'success',
+            error: false,
+            data:{
+                phoneNumber: phoneNumber,
+                name: name,
+                registeredAt: qrres.data.registererId,
+                otp: Math.floor(1000 + Math.random() * 9000),
+                isFresh: true
+            },
+            message: 'OTP sent successfully'
+        });
+    }catch(e){
+        res.status(500).json({
+            status: 'failure',
+            error: true,
+            message: 'Internal server error'
+        });
+    }
+
 }
 
 module.exports = {
     clientSignup,
     clientLogin,
-    clientLoginWithOTP
+    clientLoginWithOTP,
+    clientSignupWithOTP
 }
