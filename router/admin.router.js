@@ -9,6 +9,7 @@ const { sendNotificationToAllController } = require('../src/contollers/Notificat
 const { adminMessagesHistory } = require('../src/contollers/messageHandler/adminMessages.controller');
 const { returnAllUser } = require('../src/contollers/registeredUser.controller');
 // const { sendNotificationToAll } = require('../src/service/notificationService.helper');
+const { pendingApprovals } = require('../src/contollers/auth/pendingApprovals.controller');
 
 router.post('/signup', adminSignup);
 router.post('/login', adminLogin);
@@ -17,6 +18,7 @@ router.post('/profile', authorizeUser,isAdmin, adminProfile);
 router.post('/sendNotificationToAll', authorizeUser,isAdmin,sendNotificationToAllController);
 router.post('/messageHistory', authorizeUser,isAdmin,adminMessagesHistory);
 router.post('/allpeople', authorizeUser,isAdmin,returnAllUser);
+router.post('/pendingapprovals', authorizeUser,isAdmin, pendingApprovals);
 
 router.all("*",(req,res)=>{
     res.status(404).json({
