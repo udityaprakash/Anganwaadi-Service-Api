@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {clientLogin, clientSignup, clientLoginWithOTP, clientSignupWithOTP} = require('../src/contollers/auth/client.auth.controller');
+const {clientLogin, clientSignup, clientLoginWithOTP, clientSignupWithOTP, verifyOTP} = require('../src/contollers/auth/client.auth.controller');
 const {clientQrVerification} = require('../src/contollers/QR handler/qrdata.controller');
 const { authorizeUser } = require('../src/middlewares/setAuthId.middleware');
 const { clientProfile } = require('../src/contollers/Profile.controller');
@@ -10,6 +10,7 @@ const {clientMessagesHistory} = require('../src/contollers/messageHandler/client
 // router.post('/login', clientLogin);
 router.post('/loginWithOTP', clientLoginWithOTP);
 router.post('/signupWithOTP', clientSignupWithOTP);
+router.post('/verifyotp', verifyOTP);
 
 
 // router.post('/getRegistered', authorizeUser, clientQrVerification);

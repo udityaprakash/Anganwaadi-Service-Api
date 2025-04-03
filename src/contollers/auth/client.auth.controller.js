@@ -218,9 +218,74 @@ const clientSignupWithOTP = async (req, res) => {
 
 }
 
+const verifyOTP = async (req,res) => {
+
+    const {phoneNumber, otp} = req.body;
+    if(!phoneNumber || !otp){
+        return res.status(400).json({
+            status: 'failure',
+            error: true,
+            message: 'Please provide all the required fields like phoneNumber and otp'
+        });
+    }
+
+    const userexist = await tempdb.findOne({phoneNumber: phoneNumber});
+    const checkindb = await client.findOne({phoneNumber: phoneNumber});
+    if(!userexist){
+        if(!checkindb){
+
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Phone number is not registered. Kindly signup first'
+            });
+
+        }else{
+            return res.status(400).json({
+                status: 'failure',
+                error: true,
+                message: 'Phone number is already registered kindly login'
+            });
+        }
+
+    }
+    if(userexist.otp !== otp){
+        return res.status(400).json({
+            status: 'failure',
+            error: true,
+            message: 'Invalid OTP'
+        });
+    }
+    var clientUser;
+    if(userexist.isFresh){
+        clientUser = new client({
+            phoneNumber: userexist.phoneNumber,
+            name: userexist.name,
+            registeredName: userexist.name,
+            registeredAt: userexist.registeredAt,
+        });
+        await clientUser.save();
+    }
+
+    await tempdb.findOneAndDelete({phoneNumber: phoneNumber});
+    const authToken = await jwt.sign({ id: checkindb._id, userType:'client' }, process.env.JWT_SECRET);
+
+    res.status(200).json({
+        status: 'success',
+        error: false,
+        data:{
+            clientUser,
+            authToken
+        },
+        message: 'Client user logged in successfully'
+    });
+
+}
+
 module.exports = {
     clientSignup,
     clientLogin,
     clientLoginWithOTP,
-    clientSignupWithOTP
+    clientSignupWithOTP,
+    verifyOTP
 }

@@ -20,7 +20,7 @@ const schema= new Schema({
     },
     deviceId: {
         type:String,
-        required:true
+        required:false
     },
 },{timestamps:true});
 
