@@ -268,7 +268,7 @@ const verifyOTP = async (req,res) => {
     }
 
     await tempdb.findOneAndDelete({phoneNumber: phoneNumber});
-    const authToken = await jwt.sign({ id: checkindb._id, userType:'client' }, process.env.JWT_SECRET);
+    const authToken = await jwt.sign({ id: clientUser._id, userType:'client' }, process.env.JWT_SECRET);
 
     res.status(200).json({
         status: 'success',
