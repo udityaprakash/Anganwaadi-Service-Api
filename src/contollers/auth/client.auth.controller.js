@@ -256,8 +256,8 @@ const verifyOTP = async (req,res) => {
             message: 'Invalid OTP'
         });
     }
-    var clientUser;
     if(userexist.isFresh){
+        var clientUser;
         clientUser = new client({
             phoneNumber: userexist.phoneNumber,
             name: userexist.name,
@@ -268,13 +268,14 @@ const verifyOTP = async (req,res) => {
     }
 
     await tempdb.findOneAndDelete({phoneNumber: phoneNumber});
-    const authToken = await jwt.sign({ id: clientUser._id, userType:'client' }, process.env.JWT_SECRET);
+    var clientindb = await client.findOne({phoneNumber: phoneNumber});
+    const authToken = await jwt.sign({ id: clientindb._id, userType:'client' }, process.env.JWT_SECRET);
 
     res.status(200).json({
         status: 'success',
         error: false,
         data:{
-            clientUser,
+            clientindb,
             authToken
         },
         message: 'Client user logged in successfully'
