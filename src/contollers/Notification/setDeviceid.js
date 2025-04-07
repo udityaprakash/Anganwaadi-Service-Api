@@ -2,7 +2,8 @@ const client = require('../../database/schema/enduser.schema');
 const setDeviceid = async (req, res) => {
 
     const {deviceid} = req.body;
-    const {userId} = req.authId;
+    const userId = req.authId;
+    // console.log(userId);
 
     if(!deviceid){
         return res.status(400).json({
@@ -11,7 +12,7 @@ const setDeviceid = async (req, res) => {
             message: 'Please provide all the required fields like deviceid'
         });
     }
-    const user = await client.findOneAndUpdate({userId: userId},{
+    const user = await client.findOneAndUpdate({_id: userId},{
         deviceId: deviceid
     });
     if(!user){
