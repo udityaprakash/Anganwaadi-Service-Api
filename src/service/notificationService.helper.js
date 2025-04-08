@@ -3,11 +3,12 @@ require('dotenv').config();
 
 
 const sendNotificationToAll = async (message, playerIds) => {
+    console.log("received players here: "+playerIds.length+ " list is "+playerIds);
     const notificationData = {
       app_id: process.env.ONESIGNAL_APP_ID,
       contents: { en: message != '' ? message : 'You have new Notification. Click to View!' },
       include_player_ids: playerIds,
-      // included_segments: ['All'],
+      // included_segments: ['ALL'],
       headings: { en: 'Anganwadi Suuchna' },
       content_available: true,
       data:{
