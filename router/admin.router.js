@@ -10,12 +10,14 @@ const { adminMessagesHistory } = require('../src/contollers/messageHandler/admin
 const { returnAllUser } = require('../src/contollers/registeredUser.controller');
 // const { sendNotificationToAll } = require('../src/service/notificationService.helper');
 const { pendingApprovals } = require('../src/contollers/auth/pendingApprovals.controller');
+const { sendNotificationToSelected } = require('../src/contollers/Notification/sendNotificationToSelected.controller');
 
 router.post('/signup', adminSignup);
 router.post('/login', adminLogin);
 router.post('/qr',authorizeUser,isAdmin, adminQRData);
 router.post('/profile', authorizeUser,isAdmin, adminProfile);
 router.post('/sendNotificationToAll', authorizeUser,isAdmin,sendNotificationToAllController);
+router.post('/sendNotificationToSelected', authorizeUser,isAdmin,sendNotificationToSelected);
 router.post('/messageHistory', authorizeUser,isAdmin,adminMessagesHistory);
 router.post('/allpeople', authorizeUser,isAdmin,returnAllUser);
 router.post('/pendingapprovals', authorizeUser,isAdmin, pendingApprovals);
