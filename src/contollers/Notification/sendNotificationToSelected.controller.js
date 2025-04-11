@@ -16,18 +16,20 @@ const sendNotificationToSelected = async (req, res) => {
             });
         }
         msg = msg ? msg : 'You have new Notification. Click to View!';
+        const fetchAllUsers = await clientDB.find({_id:{
+            $in: userIds
+        } ,registeredAt: req.authId
+        // deviceId: { $exists: true, $ne: null }
+        }).select('deviceId');
+        const userselectedIds = fetchAllUsers.map(user => user._id);
+        const deviceIds = fetchAllUsers.map(user => user.deviceId);
         const newMsg = new msgLog({
             message: msg,
             sendBy: req.authId,
             sendToAll: false,
-            sendTo:userIds,
+            sendTo:userselectedIds,
         });
         await newMsg.save();
-        const fetchAllUsers = await clientDB.find({_id:{
-            $in: userIds
-        } ,registeredAt: req.authId,
-        deviceId: { $exists: true, $ne: null }}).select('deviceId');
-        const deviceIds = fetchAllUsers.map(user => user.deviceId);
         console.log(fetchAllUsers+ " device ids are: "+deviceIds);  
         const n = await sendNotificationToAll(msg, deviceIds);
         console.log(n);
