@@ -23,6 +23,7 @@ const sendNotificationToSelected = async (req, res) => {
         }).select('deviceId');
         const userselectedIds = fetchAllUsers.map(user => user._id);
         const deviceIds = fetchAllUsers.map(user => user.deviceId);
+        
         const newMsg = new msgLog({
             message: msg,
             sendBy: req.authId,
